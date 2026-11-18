@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { categories } from '../../data/categories';
+export async function getStaticPaths() {
+  const items = await getCollection('listings', ({ data }) => data.status !== 'Draft');
+  return items.map(item => ({ params: { slug: item.id }, props: { item } }));
+}
+const { item } = Astro.props;
+const { Content } = await render(item);
+const category = categories.find(c => c.slug === item.data.category);
+function getYoutubeId(url: string | undefined): string | null {
+  if (!url) return null;
+  try {
+    const parsed = new URL(url);
+    const host = parsed.hostname.toLowerCase();
+    let id = '';
+    if (host === 'youtu.be' || host === 'www.youtu.be') id = parsed.pathname.slice(1);
+    else if (['youtube.com', 'www.youtube.com', 'm.youtube.com'].includes(host)) {
+      if (parsed.pathname === '/watch') id = parsed.searchParams.get('v') || '';
+      else if (parsed.pathname.startsWith('/shorts/') || parsed.pathname.startsWith('/embed/')) id = parsed.pathname.split('/')[2] || '';
+    }
+    return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
+  } catch { return null; }
+}
+const videoId = getYoutubeId(item.data.video);
+---
+<BaseLayout title={item.data.title} description={`${item.data.title}: $${item.data.price.toFixed(2)}. ${item.data.condition}.`}>
+  <a class="back" href={`/knives/${item.data.category}/`}>← {category?.title || 'Category'}</a>
+  <div class="details">
+    <div>
+      {item.data.photos.length ? <div class="gallery">{item.data.photos.map((photo, index) => <img src={photo} alt={`${item.data.title} photo ${index + 1}`} loading={index === 0 ? 'eager' : 'lazy'} />)}</div> : <div class="placeholder">Photos coming soon</div>}
+      {videoId && <section style="margin-top:30px"><h2>Video</h2><iframe class="video" src={`https://www.youtube-nocookie.com/embed/${videoId}`} title={`${item.data.title} video`} allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe></section>}
+    </div>
+    <div>
+      <span class="tag">{item.data.status}</span><h1>{item.data.title}</h1>
+      <p class="price">${item.data.price.toFixed(2)}</p>
+      <p><strong>Condition:</strong> {item.data.condition}</p>
+      <h2>Description</h2><Content />
+      <p class="muted">For availability or questions, contact the owner. Contact details will be configured before launch.</p>
+    </div>
+  </div>
+</BaseLayout>
