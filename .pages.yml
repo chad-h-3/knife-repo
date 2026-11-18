@@ -1,0 +1,65 @@
+media:
+  input: public/images
+  output: /images
+  extensions: [jpg, jpeg, png, webp]
+
+content:
+  - name: listings
+    label: Knife Listings
+    type: collection
+    path: src/content/listings
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    fields:
+      - name: title
+        label: Item Name
+        type: string
+        required: true
+      - name: price
+        label: Asking Price (USD)
+        type: number
+        required: true
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - value: fixed-blade
+              label: Fixed Blade Knives
+            - value: spring-assisted
+              label: Spring Assisted
+            - value: folding
+              label: Folding Knives
+            - value: multi-tools
+              label: Multi-Tools
+            - value: antiques
+              label: Antique Knives
+            - value: vintage
+              label: Vintage Knives
+      - name: condition
+        label: Condition
+        type: string
+      - name: status
+        label: Status
+        type: select
+        options:
+          values: [Draft, Available, Pending, Sold]
+      - name: photos
+        label: Photos
+        type: image
+        options:
+          multiple:
+            max: 12
+          extensions: [jpg, jpeg, png, webp]
+      - name: video
+        label: YouTube Video URL
+        type: string
+      - name: body
+        label: Description
+        type: rich-text
+
+actions:
+  - name: publish
+    label: Publish Website
+    workflow: publish.yml
