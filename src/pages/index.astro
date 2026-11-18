@@ -15,7 +15,7 @@ const counts = Object.fromEntries(categories.map(c => [c.slug, all.filter(x => x
     <h2 id="category-title">Shop by Category</h2>
     <div class="grid">
       {categories.map(c => <a class="card" href={`/knives/${c.slug}/`}>
-        <div class={`category-art ${c.accent}`} aria-hidden="true"><span>◆</span></div>
+        <div class="category-art"><img src={c.image} alt={c.imageAlt} loading="lazy" referrerpolicy="no-referrer" /></div>
         <div class="card-body"><h3>{c.title}</h3><p class="muted">{c.description}</p><span class="tag">{counts[c.slug]} available</span></div>
       </a>)}
     </div>
@@ -23,9 +23,8 @@ const counts = Object.fromEntries(categories.map(c => [c.slug, all.filter(x => x
   <section id="about" class="about"><h2>About the Collection</h2><p class="muted">Items are listed with condition and asking price. Selected listings may include a demonstration or restoration video. Contact information will be added before launch.</p></section>
 </BaseLayout>
 <style>
-  .category-art{height:178px;display:grid;place-items:center;background:linear-gradient(145deg,#243942,#84938b);color:#e9eee9}
-  .category-art span{font-size:4rem;opacity:.65;transform:rotate(20deg)}
-  .assisted{background:linear-gradient(145deg,#343d4b,#a5a59a)}.folding{background:linear-gradient(145deg,#424439,#9c8c75)}
-  .multi{background:linear-gradient(145deg,#334b4c,#a1a8a0)}.antique{background:linear-gradient(145deg,#554739,#b69d77)}
-  .vintage{background:linear-gradient(145deg,#474034,#a7a091)}.about{margin-top:65px}
+  .category-art{height:190px;overflow:hidden;background:#24343b}
+  .category-art img{width:100%;height:100%;object-fit:cover;filter:brightness(.82) contrast(1.08);transition:transform .25s ease,filter .25s ease}
+  .card:hover .category-art img{transform:scale(1.04);filter:brightness(.96) contrast(1.05)}
+  .about{margin-top:65px}
 </style>
