@@ -1,0 +1,42 @@
+---
+interface Props { title: string; description?: string; }
+const { title, description = 'Personal knife collection and available items.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <title>{title} | Knife Collection</title>
+  <style is:global>
+    :root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#202a31;background:#f5f6f4;font-synthesis:none}
+    *{box-sizing:border-box}body{margin:0;line-height:1.55}
+    a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid #146b82;outline-offset:3px}
+    img{max-width:100%;height:auto;display:block}button,input{font:inherit}
+    .wrap{width:min(1120px,calc(100% - 36px));margin-inline:auto}
+    .header{background:#1d2930;color:white}.nav{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{font-weight:800;letter-spacing:.07em}.navlinks{display:flex;gap:20px;font-size:.95rem;color:#e5e9eb}
+    main{min-height:calc(100vh - 150px)}.footer{margin-top:72px;padding:25px 0;background:#e6eae8;color:#516068;font-size:.88rem}
+    h1,h2,h3{line-height:1.18}h1{font-size:clamp(2rem,5vw,3.4rem)}h2{font-size:clamp(1.5rem,3vw,2rem)}
+    .hero{padding:70px 0 45px}.eyebrow{text-transform:uppercase;font-weight:750;letter-spacing:.13em;color:#537682;font-size:.75rem}
+    .muted{color:#66747a}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+    .card{display:block;border:1px solid #dce2df;background:white;border-radius:14px;overflow:hidden;transition:transform .17s,box-shadow .17s}
+    .card:hover{transform:translateY(-3px);box-shadow:0 9px 24px #17232a17}.card-body{padding:18px}.card h3{margin:0 0 8px}
+    .photo{aspect-ratio:4/3;object-fit:cover;width:100%;background:linear-gradient(140deg,#374953,#7d8c88)}
+    .placeholder{display:grid;place-items:center;color:white;font-size:2.3rem;aspect-ratio:4/3;background:linear-gradient(140deg,#354c54,#73837c)}
+    .price{font-size:1.4rem;font-weight:800}.tag{display:inline-block;border-radius:20px;background:#e8eee9;color:#335c4a;padding:3px 10px;font-size:.8rem;font-weight:650}
+    .back{display:inline-block;margin:28px 0 10px;color:#275c6c}.details{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,1fr);gap:32px;margin-top:25px}
+    .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gallery img:first-child{grid-column:1/-1}
+    .gallery img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px}
+    .video{width:100%;aspect-ratio:16/9;border:0;border-radius:12px}
+    @media(max-width:750px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.details{grid-template-columns:1fr}.navlinks{gap:12px}}
+    @media(max-width:440px){.grid{grid-template-columns:1fr}.hero{padding:45px 0 25px}.brand{font-size:.88rem}}
+  </style>
+</head>
+<body>
+  <header class="header"><nav class="wrap nav"><a class="brand" href="/">THE KNIFE COLLECTION</a><div class="navlinks"><a href="/">Categories</a><a href="/#about">About</a></div></nav></header>
+  <main class="wrap"><slot /></main>
+  <footer class="footer"><div class="wrap">Personal collection · Photos and prices are provided for reference · Contact the owner for details</div></footer>
+</body>
+</html>
