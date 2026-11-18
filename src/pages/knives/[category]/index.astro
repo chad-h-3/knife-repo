@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { categories } from '../../../data/categories';
+import { getCollection } from 'astro:content';
+export function getStaticPaths() {
+  return categories.map(category => ({ params: { category: category.slug }, props: { category } }));
+}
+const { category } = Astro.props;
+const entries = (await getCollection('listings'))
+  .filter(item => item.data.category === category.slug && ['Available', 'Pending'].includes(item.data.status))
+  .sort((a, b) => (a.data.status === 'Available' ? 0 : 1) - (b.data.status === 'Available' ? 0 : 1));
+---
+<BaseLayout title={category.title} description={category.description}>
+  <a href="/" class="back">← All categories</a>
+  <h1>{category.title}</h1><p class="muted">{category.description}</p>
+  <p class="eyebrow">{entries.length} listings</p>
+  {entries.length === 0 ? <p>No available items in this category yet. Check back later.</p> :
+  <div class="grid">
+    {entries.map(item => <a class="card" href={`/items/${item.id}/`}>
+      {item.data.photos[0] ? <img class="photo" src={item.data.photos[0]} alt={item.data.title} loading="lazy" /> : <div class="placeholder" aria-hidden="true">◆</div>}
+      <div class="card-body"><h3>{item.data.title}</h3><p class="price">${item.data.price.toFixed(2)}</p><span class="tag">{item.data.status}</span></div>
+    </a>)}
+  </div>}
+</BaseLayout>
